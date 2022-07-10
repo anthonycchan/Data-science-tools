@@ -1,0 +1,15 @@
+Generate public and private keys for the local machine:
+- Open powershell
+- enter command> ssh-keygen
+- public and private keys will be saved in C:/Users/Anthony/.ssh
+
+Starting a Virtual Machine:
+- Resources -> Compute Engine
+- Create Instance -> edit
+- Add local public key to ssh keys
+- Create
+
+Accessing Virtual Machine:
+- Open powershell
+- ssh public IP of instance
+	- eg. ssh 34.69.10.236

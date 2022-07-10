@@ -1,0 +1,13 @@
+Open Refine functionalities:
+- Document: CSE6242_data_and_visual_analytics\Homework_1\Argo-Lite_SQLite_OpenRefine.pdf
+	- page 13, Q4
+- Clean raw data files (TSV, CSV, Excel, JSON, XML, RDF, XML, Google data docs)
+- Filter rows with blank entries
+- Split columns into multple columns based on a delimeter. eg. "/"
+- Cluster rows based on a column. 
+	- eg. Nike, nike, niKe -> change all values to Nike
+- Replace values that match defined pattern with another value
+	- eg. Change null to Unknown
+- Create a new column based on an existing column
+	- eg. New column value based on old column containing certain text
+	- eg. New column value based on old column numeric value

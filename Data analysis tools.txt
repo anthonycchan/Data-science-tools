@@ -1,0 +1,74 @@
+Pyspark (local)
+	Work directory: 
+		CSE6242_data_and_visual_analytics\Homework_3\hw3-skeleton
+		
+	Docker image tar file: pysparkDocker.tar
+
+	Load docker image:
+		docker load -i pysparkDocker.tar
+
+	Docker start command:
+		docker container run -d -v "${PWD}/Q1:/root" -p 127.0.0.1:6242:8888 --name hw3 polochau/cse6242-2021fall
+
+Databricks (online)
+	Work directory:
+		CSE6242_data_and_visual_analytics\Homework_3\hw3-skeleton/Q2
+	Create a cluster:
+		- Compute -> Create cluster (6.4 (includes Apache Spark 2.4.5, Scala 2.11))
+	Upload data files:
+		- Data -> Create table (taxi_zone_lookup.csv, nyc-tripdata.csv)
+	Create workspace notebook:
+		- Workspace -> Create notebook
+		- import q2.dbc
+		- Attach cluster
+
+Distributed computing on Amazon EC2:
+	- Amazon S3, Elastic map reduce (EMR), Elastic Cloud Computing EC2
+	- AWS setup.mp4
+	Work directory: 
+		CSE6242_data_and_visual_analytics\Homework_3\hw3-skeleton
+	Docs:
+		- AWS Setup Doc.pdf
+		
+	Cloudwatch Usage Alert
+		- Set region to US East (N. Virginia)
+		- Open Cloudwatch -> Alarms -> Billing
+		- Create alarm
+	S3 buckets
+		- Create bucket for logging
+		- Create bucket for general storage
+	EMR
+		- Create a cluster
+		- Set notebook location to S3 bucket for general storage
+		- Open notebook in JupyterLab
+		- Set kernel to PySpark
+	- Stop Notebook, terminate cluster, delete S3 buckets	
+		
+Distributed computing on Google Cloud Platform (GCP)
+	Work directory: 
+			CSE6242_data_and_visual_analytics\Homework_3\hw3-skeleton
+	- Create bucket (https://www.youtube.com/watch?v=RjS3HAxlCqo) (4) GCP Creating Bucket.mp4
+		- Cloud Storage -> Create Bucket
+			- Use standard storage class
+			- Use Access control -> Fine grained
+			- Create bucket
+			- upload input data files for analysis
+	- Create cluster (https://www.youtube.com/watch?v=x5d61RLQAm8) (4) GCP Creating Cluster.mp4
+		- Dataproc
+			- Create cluster
+			- Choose cluster type: "Standard (1 master, N workers"
+			- Auto scaling policy: None
+			- Versioning -> 1.5 Debian 10
+			- Check Enable Component gateway checkbox (Enables web interfaces)
+			- Optional components -> "Anaconda", "Jupyter Notebook"
+			- Customize cluster -> Cloud storage staging bucket -> select bucket
+			- Create
+	- Open Jupyter notebook in Cluster
+		- Select cluster -> Web interfaces -> Jupyter
+		- Upload notebook to GCS folder
+		- Set kernel to PySpark
+	- Delete bucket and cluster after use
+	
+Microsoft Machine Learning Studio
+	- UI based tool to perform machine learning
+	- Moved to Azure Machine Learning

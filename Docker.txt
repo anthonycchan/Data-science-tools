@@ -1,0 +1,198 @@
+Basic Example:
+	Download Centos docker image:
+		- docker pull centos
+	Run CentOS docker image:
+		- docker run -d -t --name cantcontainmyself centos
+	Open bash shell:
+		- docker exec -it cantcontainmyself bash
+	Resource monitor:
+		- docker stats
+	Stop container:
+		- docker stop cantcontainmyself
+	Start container:
+		- docker start cantcontainmyself
+		
+==============================================================================
+Clone a repository:
+	docker run --name repo alpine/git clone https://github.com/docker/getting-started.git
+	docker cp repo:/git/getting-started/ .
+Build/Create an Image: (Build whenever there's a change to the image)
+	cd getting-started
+	docker build -t docker101tutorial .
+	docker build -t getting-started .
+Run container:
+	docker run -d -p 80:80 --name docker-tutorial docker101tutorial
+		- -d to start in daemon mode
+		- -p port <host port>:<docker port>
+	docker run -dp 3000:3000 getting-started
+	docker run -d ubuntu bash -c "shuf -i 1-10000 -n 1 -o /data.txt && tail -f /dev/null"
+		- Start an Ubuntu bash shell container
+		- execute 2 commands on bash:
+			- create a file with random number from 1 to 10000
+			- Watch a file to keep the container running
+	docker run -it ubuntu ls /
+		- Start a container using ubuntu image and run ls on it
+		
+Run shell on container:
+	docker run -it <container id> sh
+	docker run -it <container id> bash
+	
+Tagging:
+	docker tag docker101tutorial /docker101tutorial
+Publish an image to docker hub:
+	docker push /docker101tutorial
+	
+Stop the container:
+	docker stop <containter id>
+Remove the container:
+	docker rm -f <container id>
+Delete image:
+	docker image rm <image id>
+
+Sharing docker image to DockerHub:
+	- https://hub.docker.com/
+	Login to Docker Hub;
+		- docker login -u <username>
+	Tagging:
+		- docker tag getting-started <username>/getting-started
+	Push:
+		- docker push <username>/getting-started
+
+Testing on Play with Docker website:
+	- https://labs.play-with-docker.com/
+	- docker run -dp 3000:3000 <username>/getting-started
+
+Execute a command on a docker container:
+	- docker exec <container-id> cat /data.txt
+
+Persisting data across multiple containers:
+	Create a volume: (shared directory)
+		- docker volume create todo-db
+	Start a container with an attached shared volume:
+		- docker run -dp 3000:3000 -v todo-db:/etc/todos getting-started
+	Location of volume storage:
+		- docker volume inspect todo-db
+	Delete volume:
+		- docker volume rm todo-db
+
+Bind mounts:
+	- persists data from custom location
+	- Run container to support development workflow:
+		- Rebuild containers when shared mounted source code changes
+		- Mount source codes, Install dependencies, Start nodemon to watch for filesystem changes:
+	Command:
+		docker run -dp 3000:3000 -w /app -v "%cd%:/app" node:12-alpine sh -c "yarn install && yarn run dev"
+			- -dp 3000:3000 -run in detached mode and port mapping 
+			- -w app -set the container present working directory where command will run from
+			- -v "%cd%:/app" -Bind mount (link) host's directory to container's /app directory
+			- node:12-alpine -Image to use
+			- sh -c "yarn install && yarn run dev" -the command. 
+				- start shell sh
+				- yarn install -install dependencies and run dev
+					- dev script runs nodemon
+			
+Multi-Container Apps:
+	- Make containers talk to each other
+	Create the network:
+		- docker network create todo-app
+			- create a network named todo-app
+	Start a MySQL container and attach it to the network:
+		- docker run -d 
+			--network todo-app --network-alias mysql 
+			-v todo-mysql-data:/var/lib/mysql 
+			-e MYSQL_ROOT_PASSWORD=secret 
+			-e MYSQL_DATABASE=todos mysql:5.7
+				- volume is auto-created
+	Run docker MySQL:
+		- docker exec -it <container id> mysql -p
+	
+Run Nicolaka/netshoot image to get mysql docker container ip address:
+	-docker run -it --network todo-app nicolaka/netshoot
+	Get IP address of container:
+		- dig mysql
+
+Run docker container connected to mysql database:
+	docker run -dp 3000:3000 \
+		  -w /app -v "$(pwd):/app" \
+		  --network todo-app \
+		  -e MYSQL_HOST=mysql \
+		  -e MYSQL_USER=root \
+		  -e MYSQL_PASSWORD=secret \
+		  -e MYSQL_DB=todos \
+		  node:12-alpine \
+		  sh -c "yarn install && yarn run dev"
+
+View logs to verify mysql is connected:
+	- docker logs <container id>
+
+Verify items are being added to the database:
+	- docker exec -it <mysql-container-id> mysql -p todos
+	
+
+Docker Compose:
+	- Tool to define and share multi-container applications
+
+	Create a file named docker-compose.yml:
+		version: "3.8"
+
+	Define the App service:
+		services:
+		  app:
+			image: node:12-alpine
+			command: sh -c "yarn install && yarn run dev"
+			ports:
+			  - 3000:3000
+			working_dir: /app
+			volumes:
+			  - ./:/app
+			environment:
+			  MYSQL_HOST: mysql
+			  MYSQL_USER: root
+			  MYSQL_PASSWORD: secret
+			  MYSQL_DB: todos
+
+	Define the mysql service:
+		services:
+		  mysql:
+			image: mysql:5.7
+			volumes:
+			  - todo-mysql-data:/var/lib/mysql
+			environment: 
+			  MYSQL_ROOT_PASSWORD: secret
+			  MYSQL_DATABASE: todos
+
+		volumes:
+		  todo-mysql-data:
+		  
+
+Run the docker compose project:
+	- docker-compose up -d
+
+Check logs of project:
+	- docker-compose logs -f
+
+Shutdown docker compose project:
+	- docker-compose down
+Shutdown project and remove volumes:
+	- docker-compose down --volumes
+
+Security Scan on Image:
+	- docker scan getting-started
+
+View the history of an image:
+	- docker image history getting-started
+	
+Layer Caching:
+	- Improve image build speed
+	Edit Dockerfile:
+		FROM node:12-alpine
+		WORKDIR /app
+		COPY package.json yarn.lock ./
+		RUN yarn install --production
+		COPY . .
+		CMD ["node", "src/index.js"]
+	Add .dockerignore file:
+		node_modules
+	
+
+	

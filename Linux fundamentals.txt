@@ -1,0 +1,293 @@
+Path 	Description
+/ 		The top-level directory is the root filesystem and contains all of the files required to boot the operating system before other filesystems are mounted as well as the files required to boot the other filesystems. After boot, all of the other filesystems are mounted at standard mount points as subdirectories of the root.
+/bin 	Contains essential command binaries.
+/boot 	Consists of the static bootloader, kernel executable, and files required to boot the Linux OS.
+/dev 	Contains device files to facilitate access to every hardware device attached to the system.
+/etc 	Local system configuration files. Configuration files for installed applications may be saved here as well.
+/home 	Each user on the system has a subdirectory here for storage.
+/lib 	Shared library files that are required for system boot.
+/media 	External removable media devices such as USB drives are mounted here.
+/mnt 	Temporary mount point for regular filesystems.
+/opt 	Optional files such as third-party tools can be saved here.
+/root 	The home directory for the root user.
+/sbin 	This directory contains executables used for system administration (binary system files).
+/tmp 	The operating system and many programs use this directory to store temporary files. This directory is generally cleared upon system boot and may be deleted at other times without any warning.
+/usr 	Contains executables, libraries, man files, etc.
+/var 	This directory contains variable data files such as log files, email in-boxes, web application related files, cron files, and more.
+
+visudo: Edit sudoers file
+
+Command 			Description
+ man <tool> 		Opens man pages for the specified tool.
+<tool> -h 			Prints the help page of the tool.
+apropos <keyword> 	Searches through man pages' descriptions for instances of a given keyword.
+cat 				Concatenate and print files.
+whoami 				Displays current username.
+id 					Returns users identity.
+hostname 			Sets or prints the name of the current host system.
+uname 				Prints operating system name.
+pwd 				Returns working directory name.
+ifconfig 			The ifconfig utility is used to assign or view an address to a network interface and/or configure network interface parameters.
+ip 					Ip is a utility to show or manipulate routing, network devices, interfaces, and tunnels.
+netstat 			Shows network status.
+ss 					Another utility to investigate sockets.
+ps 					Shows process status.
+who 				Displays who is logged in.
+env 				Prints environment or sets and executes a command.
+lsblk 				Lists block devices.
+lsusb 				Lists USB devices.
+lsof 				Lists opened files.
+lspci 				Lists PCI devices.
+sudo 				Execute command as a different user.
+su 					The su utility requests appropriate user credentials via PAM and switches to that user ID (the default user is the superuser). A shell is then executed.
+useradd 			Creates a new user or update default new user information.
+userdel 			Deletes a user account and related files.
+usermod 			Modifies a user account.
+addgroup 			Adds a group to the system.
+delgroup 			Removes a group from the system.
+passwd 				Changes user password.
+dpkg 				Install, remove and configure Debian-based packages.
+apt 				High-level package management command-line utility.
+aptitude 			Alternative to apt.
+snap 				Install, remove and configure snap packages.
+gem 				Standard package manager for Ruby.
+pip 				Standard package manager for Python.
+git 				Revision control system command-line utility.
+systemctl 			Command-line based service and systemd control manager.
+ps 					Prints a snapshot of the current processes.
+journalctl 			Query the systemd journal.
+kill 				Sends a signal to a process.
+bg 					Puts a process into background.
+jobs 				Lists all processes that are running in the background.
+fg 					Puts a process into the foreground.
+curl 				Command-line utility to transfer data from or to a server.
+wget 				An alternative to curl that downloads files from FTP or HTTP(s) server.
+python3 -m http.server 	Starts a Python3 web server on TCP port 8000.
+ls 					Lists directory contents.
+cd 					Changes the directory.
+clear 				Clears the terminal.
+touch 				Creates an empty file.
+mkdir 				Creates a directory.
+tree 				Lists the contents of a directory recursively.
+mv 					Move or rename files or directories.
+cp 					Copy files or directories.
+nano 				Terminal based text editor.
+which 				Returns the path to a file or link.
+find 				Searches for files in a directory hierarchy.
+updatedb 			Updates the locale database for existing contents on the system.
+locate 				Uses the locale database to find contents on the system.
+more 				Pager that is used to read STDOUT or files.
+less 				An alternative to more with more features.
+head 				Prints the first ten lines of STDOUT or a file.
+tail 				Prints the last ten lines of STDOUT or a file.
+sort 				Sorts the contents of STDOUT or a file.
+grep 				Searches for specific results that contain given patterns.
+cut 				Removes sections from each line of files.
+tr 					Replaces certain characters.
+column 				Command-line based utility that formats its input into multiple columns.
+awk 				Pattern scanning and processing language.
+sed 				A stream editor for filtering and transforming text.
+wc 					Prints newline, word, and byte counts for a given input.
+chmod 				Changes permission of a file or directory.
+chown 				Changes the owner and group of a file or directory.
+
+Package management
+DPKG
+	- For installing Debian .deb packages
+	- similar to APT
+Search APT database for installed packages:
+	$ apt-cache search impacket
+Show package information:
+	$ apt-cache show impacket-scripts
+List all installed packages:
+	$ apt list --installed
+	$ dpkg --list
+Install:
+	$ sudo apt install impacket-scripts -y
+	$ sudo dpkg -i strace_4.21-1ubuntu1_amd64.deb 
+Uninstall:
+	$ sudo apt-get remove gimp
+Uninstall and remove configurations:
+	$ sudo apt-get --purge remove gimp
+Remove unused packages:
+	$ sudo apt-get autoremove
+Remove downloaded archive files:
+	$ sudo apt-get clean
+
+
+Service and process management:
+	systemd- init process that starts other services
+	
+Systemctl
+	Start a service:
+		$ systemctl start ssh
+	Check the status:
+		$ systemctl status ssh
+	List all services:
+		$ systemctl list-units --type=service
+
+View logs of a service:
+	$ journalctl -u cron.service --no-pager
+	
+Kill a process:
+Signal	Description
+1	SIGHUP - This is sent to a process when the terminal that controls it is closed.
+2	SIGINT - Sent when a user presses [Ctrl] + C in the controlling terminal to interrupt a process.
+3	SIGQUIT - Sent when a user presses [Ctrl] + D to quit.
+9	SIGKILL - Immediately kill a process with no clean-up operations.
+15	SIGTERM - Program termination.
+19	SIGSTOP - Stop the program. It cannot be handled anymore.
+20	SIGTSTP - Sent when a user presses [Ctrl] + Z to request for a service to suspend. The user can handle it afterward.
+
+Example:
+	$ kill 9 <pid>
+
+Background a process:
+	Method 1:
+		Run a process:
+			$ ping -c 10 www.google.com > pingoutput.out
+		Suspends the process:
+			$ CTRL + Z:
+		Continue running process in background:
+			$ bg
+	
+	Method 2:
+		Run a process in the background and redirect output:
+			$ ping -c 10 www.google.com > pingoutput.out &
+	
+Foreground a process:
+	See processes running in background:
+		$ jobs
+	Bring process to foreground:
+		$ fg %<ID>
+
+Execute multiple commands:
+	Ignores previous command results: (ignores errors)
+		$ echo '1'; echo '2'
+	Stops when there's error:
+		$ echo '1' && echo '2'
+
+
+Apache
+	default home page:
+		- /var/www/html/index.html
+	start:
+		$ sudo systemctl start apache2
+	stop:
+		$ sudo systemctl stop apache2
+	restart:
+		$ sudo systemctl restart apache2
+	
+CURL 
+	- File transfer over  HTTP, HTTPS, FTP, SFTP, FTPS, or SCP.
+	$ curl http://localhost
+	
+WGET
+	- File transfer over FTP, HTTP
+	- Downloads the file locally
+	$ wget http://localhost
+	
+NPM
+	Start a simple http server:
+		$ http-server -p 8080
+
+PHP
+	Start a simple http server:
+		$ php -S 127.0.0.1:8080
+
+WHICH
+	Returns the path to the file to be executed
+		$ which python
+		
+Find
+	Syntax: find <location> <options>
+	$ find / -type f -name *.conf -user root -size +20k -newermt 2020-03-03 -exec ls -al {} \; 2>/dev/null
+	
+	Option					Description
+	-type f					Hereby, we define the type of the searched object. In this case, 'f' stands for 'file'.
+	-name *.conf			With '-name', we indicate the name of the file we are looking for. The asterisk (*) stands for 'all' files with the '.conf' extension.
+	-user root				This option filters all files whose owner is the root user.
+	-size +20k				Larger than 20 KiB.
+	-newermt 2020-03-03		Files newer than the specified date will be presented.
+	-exec ls -al {} \;		Executes the specified command, using the curly brackets as placeholders for each result. The backslash escapes the next character from being interpreted by the shell because otherwise, the semicolon would terminate the command and not reach the redirection.
+	2>/dev/null				STDERR redirection to the 'null device', \
+	
+Locate
+	- Fast way to find files
+	$ sudo updatedb
+	$ locate *.conf
+
+File Descriptors and Redirection
+	Input data stream:
+		STDIN - 0
+	Output data stream:
+		STDOUT - 1
+	Output error data stream:
+		STRERR - 2
+	
+	Redirect error output to null device:
+		2>/dev/null
+	
+	Redirect STDOUT to a file:
+		find /etc/ -name shadow 2>/dev/null > results.txt
+	
+	Redirect STDIN:
+		cat < stdout.txt
+	
+	Append STDOUT to a file:
+		find /etc/ -name shadow 2>/dev/null >> results.txt
+	
+Sort 
+	Sort the output:
+		$ cat /etc/passwd | sort
+	
+Grep
+	Exclude specific results:
+		$ cat /etc/passwd | grep -v "false\|nologin"
+
+Cut
+	Get part of the result
+		$ cat /etc/passwd | cut -d ":" -f1
+			-d ":" - Set ":" as delimeter
+			-f1 - position 1
+		
+Tr
+	Replace a character with another character
+		$ cat /etc/passwd | tr ":" " "
+			- Replace ":" with a space
+
+Column
+	Display result in tabular form
+		$ cat /etc/passwd| tr ":" " " | column -t
+
+Awk
+	Select result to display:
+		$ cat /etc/passwd | tr ":" " " | column -t | awk '{print $1, $NF}'
+			- $1 -1st element
+			- $NF - last element
+		
+Sed
+	Replace text
+		$ cat /etc/passwd| tr ":" " " | column -t | awk '{print $1, $NF}' | sed s/bin/HTB/g
+			- s: replace matching patter
+			- /bin: pattern to replace
+			- /HTB: pattern to replace with
+			- /g: replace all matches
+			
+Wc
+	Count lines and characters
+		$ wc -l
+			- Count number of lines
+			
+
+Examples:
+	-  How many services are listening on the target system on all interfaces? (Not on localhost and IPv4 only)
+		$ ss -l -4 | grep -v "127\.0\.0" | grep "LISTEN" | wc -l
+	-  Determine what user the ProFTPd server is running under. Submit the username as the answer.
+		$ ps aux | grep proftpd
+	- Obtain the source code of the "https://www.inlanefreight.com" website and filter 
+	  all unique paths of that domain. Submit the number of these paths as the answer.
+		$ url https://www.inlanefreight.com | tr " " "\n" | cut -d "'" -f2 \
+		| cut -d "\"" -f2 | grep www.inlanefreight | sort -u 
+	
+	

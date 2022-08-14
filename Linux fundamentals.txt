@@ -290,4 +290,10 @@ Examples:
 		$ url https://www.inlanefreight.com | tr " " "\n" | cut -d "'" -f2 \
 		| cut -d "\"" -f2 | grep www.inlanefreight | sort -u 
 	
+
+SUID
+	Set User ID
+	$ sudo chmod u+s filename
 	
+Update the system:
+	$ sudo apt update && apt upgrade
